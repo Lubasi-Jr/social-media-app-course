@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
 import { hp } from "../helpers/common";
-import loadingState from "./loadingState";
+import Loader from "./Loader";
 
 const CustomButton = ({
   buttonStyle,
@@ -23,7 +23,7 @@ const CustomButton = ({
   if (loading) {
     return (
       <View style={[styles.button, buttonStyle, { backgroundColor: "white" }]}>
-        <loadingState />
+        <Loader />
       </View>
     );
   }
