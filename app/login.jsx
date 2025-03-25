@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useRef, useState } from "react";
 import ScreenWrapper from "../components/ScreenWrapper";
 import Icon from "../assets/icons";
 import { StatusBar } from "expo-status-bar";
@@ -9,18 +9,31 @@ import { theme } from "../constants/theme";
 import CustomInput from "../components/CustomInput";
 import { wp } from "../helpers/common";
 import { hp } from "../helpers/common";
+import CustomButton from "../components/CustomButton";
 
 const Login = () => {
   const router = useRouter();
+  const emailRef = useRef("");
+  const passwordRef = useRef("");
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async () => {
+    if (!emailRef.current || !passwordRef.current) {
+      Alert.alert("Login", "Please fill out all the fields");
+      return;
+    }
+    // Go ahead with making the API call
+  };
+
   return (
-    <ScreenWrapper>
+    <ScreenWrapper color="white">
       <StatusBar style="dark" />
       <View style={styles.container}>
         <BackButton router={router} />
         {/* Welcome message */}
         <View>
-          <Text style={styles.welcomeText}>Hey</Text>
-          <Text style={styles.welcomeText}>Welcome</Text>
+          <Text style={styles.welcomeText}>Hey,</Text>
+          <Text style={styles.welcomeText}>Welcome Back</Text>
         </View>
         {/* Form */}
         <View style={styles.form}>
@@ -30,9 +43,38 @@ const Login = () => {
           <CustomInput
             icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
             placeholder="Enter your email"
-            onChangeText={(value) => {}}
+            onChangeText={(value) => (emailRef.current = value)}
+          />
+          <CustomInput
+            icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
+            placeholder="Enter your password"
+            secureTextEntry
+            onChangeText={(value) => (passwordRef.current = value)}
+          />
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+          <CustomButton
+            title="Login"
+            loading={loading}
+            onPress={() => onSubmit}
           />
         </View>
+        {/* Footer area */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Don't have an account?</Text>
+        </View>
+        <Pressable>
+          <Text
+            style={[
+              styles.footerText,
+              {
+                color: theme.colors.primaryDark,
+                fontWeight: theme.fonts.semibold,
+              },
+            ]}
+          >
+            Sign Up
+          </Text>
+        </Pressable>
       </View>
     </ScreenWrapper>
   );
@@ -64,5 +106,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 5,
+  },
+  footerText: {
+    textAlign: "center",
+    color: theme.colors.text,
+    fontSize: hp(1.6),
   },
 });
